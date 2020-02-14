@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-course",
+  "version": "1.0.0",
+  "description": "Nodejs mentoring program",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.epam.com:Vitalii_Myroniuk/nodejs-course.git"
+  },
+  "keywords": [
+    "nodejs",
+    "mentoring"
+  ],
+  "author": "Vitalii Myroniuk",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
