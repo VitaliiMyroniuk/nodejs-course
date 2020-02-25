@@ -11,7 +11,8 @@
     "task1-babel": "nodemon ./hw1_babel/task1.js",
     "task2-babel": "nodemon ./hw1_babel/task2.js",
     "task1-babel-node": "nodemon --exec babel-node ./hw1/task1.js",
-    "task2-babel-node": "nodemon --exec babel-node ./hw1/task2.js"
+    "task2-babel-node": "nodemon --exec babel-node ./hw1/task2.js",
+    "app": "nodemon --exec babel-node ./app/app.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "@babel/core": "^7.8.4",
     "@babel/node": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
+    "@types/express": "^4.17.2",
     "babel-eslint": "^10.0.3",
     "eslint": "^6.8.0",
     "nodemon": "^2.0.2"
@@ -35,6 +37,8 @@
   "dependencies": {
     "@babel/polyfill": "^7.8.3",
     "csvtojson": "^2.0.10",
-    "esm": "^3.2.25"
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "uuid": "^7.0.0"
   }
 }
