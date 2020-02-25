@@ -1,11 +1,12 @@
 const express = require('express');
 const EntityNotFoundError = require('../error/entityNotFoundError');
 const UniqueIdentifierError = require('../error/uniqueIdentifierError');
+const userValidator = require('../validation/userValidator');
 const userService = require('../service/userService');
 
 const router = express.Router();
 
-router.post('/users', (req, res, next) => {
+router.post('/users', userValidator, (req, res, next) => {
     try {
         const userData = req.body;
         const user = userService.createUser(userData);
@@ -35,7 +36,7 @@ router.get('/users/:id', (req, res, next) => {
     }
 });
 
-router.put('/users/:id', (req, res, next) => {
+router.put('/users/:id', userValidator, (req, res, next) => {
     try {
         const id = req.params.id;
         const userData = req.body;
@@ -66,7 +67,20 @@ router.patch('/users/:id/restore', (req, res, next) => {
     }
 });
 
+router.use(validationErrorHandler);
+
 router.use(modelSavingErrorHandler);
+
+function validationErrorHandler(err, req, res, next) {
+    if (err && err.error && err.error.isJoi) {
+        res.status(400).json({
+            type: err.type,
+            message: err.error.toString()
+        });
+    } else {
+        return next(err);
+    }
+}
 
 function modelSavingErrorHandler(err, req, res, next) {
     if (err instanceof EntityNotFoundError || err instanceof UniqueIdentifierError) {
