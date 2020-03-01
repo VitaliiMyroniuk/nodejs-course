@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "outDir": "dist",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "lib": [
+      "es6"
+    ],
+    "types": [
+      "reflect-metadata"
+    ],
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": [
+    "app_typescript/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".git"
+  ]
+}
