@@ -33,4 +33,11 @@ const requestLogger = (req, res, next) => {
     next();
 };
 
-module.exports = { logger, requestLogger };
+const errorLogger = (err, req, res, next) => {
+    const errorStack = err.error && err.error.isJoi ? err.error.stack : err.stack;
+    const message = `${req.method} ${req.url} \n    Request Body: ${JSON.stringify(req.body)} \n    ${errorStack}`;
+    logger.error(message);
+    next(err);
+};
+
+module.exports = { logger, requestLogger, errorLogger };

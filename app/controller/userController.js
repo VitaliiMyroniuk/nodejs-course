@@ -1,5 +1,5 @@
 const express = require('express');
-const { logger } = require('../logger/winstonLogger');
+const { errorLogger } = require('../logger/winstonLogger');
 const EntityNotFoundError = require('../error/entityNotFoundError');
 const UniqueIdentifierError = require('../error/uniqueIdentifierError');
 const userValidator = require('../validation/userValidator');
@@ -68,6 +68,8 @@ router.patch('/users/:id/restore', (req, res, next) => {
     }
 });
 
+router.use(errorLogger);
+
 router.use(validationErrorHandler);
 
 router.use(modelSavingErrorHandler);
@@ -100,7 +102,6 @@ function commonErrorHandler(err, req, res, next) {
     if (res.headersSent) {
         return next(err);
     }
-    logger.error(err.stack);
     res.status(500).json({
         message: 'Internal Server Error'
     });
