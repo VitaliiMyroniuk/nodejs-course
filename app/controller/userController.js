@@ -1,4 +1,5 @@
 const express = require('express');
+const { logger } = require('../logger/winstonLogger');
 const EntityNotFoundError = require('../error/entityNotFoundError');
 const UniqueIdentifierError = require('../error/uniqueIdentifierError');
 const userValidator = require('../validation/userValidator');
@@ -71,6 +72,8 @@ router.use(validationErrorHandler);
 
 router.use(modelSavingErrorHandler);
 
+router.use(commonErrorHandler);
+
 function validationErrorHandler(err, req, res, next) {
     if (err && err.error && err.error.isJoi) {
         res.status(400).json({
@@ -91,6 +94,16 @@ function modelSavingErrorHandler(err, req, res, next) {
     } else {
         return next(err);
     }
+}
+
+function commonErrorHandler(err, req, res, next) {
+    if (res.headersSent) {
+        return next(err);
+    }
+    logger.error(err.stack);
+    res.status(500).json({
+        message: 'Internal Server Error'
+    });
 }
 
 module.exports = router;
