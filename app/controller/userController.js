@@ -3,10 +3,13 @@ const { logger, errorLogger } = require('../logger/winstonLogger');
 const EntityNotFoundError = require('../error/entityNotFoundError');
 const UniqueIdentifierError = require('../error/uniqueIdentifierError');
 const { checkToken, authenticateUser } = require('../security/authentication');
+const corsHandler = require('../security/corsHandler');
 const userValidator = require('../validation/userValidator');
 const userService = require('../service/userService');
 
 const router = express.Router();
+
+router.options('*', corsHandler);
 
 router.post('/login', handlerWrapper((req, res) => {
     authenticateUser(req, res);
