@@ -18,6 +18,12 @@ const userDao = {
         return db.users.get(id);
     },
 
+    getUserByCredentials(login, password) {
+        return Array.from(db.users.values())
+            .filter(user => user.login === login)
+            .find(user => user.password === password);
+    },
+
     isLoginExisted(login) {
         return Array.from(db.users.values())
             .map(user => user.login)

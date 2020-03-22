@@ -23,6 +23,10 @@ const userService = {
         return user;
     },
 
+    getUserByCredentials(login, password) {
+        return userDao.getUserByCredentials(login, password);
+    },
+
     updateUser(id, userData) {
         const user = this.getUserById(id);
         if (user.login !== userData.login) {

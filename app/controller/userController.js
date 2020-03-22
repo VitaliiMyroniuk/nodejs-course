@@ -2,10 +2,18 @@ const express = require('express');
 const { logger, errorLogger } = require('../logger/winstonLogger');
 const EntityNotFoundError = require('../error/entityNotFoundError');
 const UniqueIdentifierError = require('../error/uniqueIdentifierError');
+const { checkToken, authenticateUser } = require('../security/authentication');
+const corsHandler = require('../security/corsHandler');
 const userValidator = require('../validation/userValidator');
 const userService = require('../service/userService');
 
 const router = express.Router();
+
+router.options('*', corsHandler);
+
+router.post('/login', handlerWrapper((req, res) => {
+    authenticateUser(req, res);
+}));
 
 router.post('/users', userValidator, handlerWrapper((req, res) => {
     const userData = req.body;
@@ -13,32 +21,32 @@ router.post('/users', userValidator, handlerWrapper((req, res) => {
     res.status(201).json(user);
 }));
 
-router.get('/users', handlerWrapper((req, res) => {
+router.get('/users', checkToken, handlerWrapper((req, res) => {
     const { loginSubstring, limit } = req.query;
     const users = userService.getAutoSuggestUsers(loginSubstring, limit);
     res.status(200).json(users);
 }));
 
-router.get('/users/:id', handlerWrapper((req, res) => {
+router.get('/users/:id', checkToken, handlerWrapper((req, res) => {
     const id = req.params.id;
     const user = userService.getUserById(id);
     res.status(200).json(user);
 }));
 
-router.put('/users/:id', userValidator, handlerWrapper((req, res) => {
+router.put('/users/:id', checkToken, userValidator, handlerWrapper((req, res) => {
     const id = req.params.id;
     const userData = req.body;
     const user = userService.updateUser(id, userData);
     res.status(200).json(user);
 }));
 
-router.delete('/users/:id', handlerWrapper((req, res) => {
+router.delete('/users/:id', checkToken, handlerWrapper((req, res) => {
     const id = req.params.id;
     const user = userService.deleteUser(id);
     res.status(200).json(user);
 }));
 
-router.patch('/users/:id/restore', handlerWrapper((req, res) => {
+router.patch('/users/:id/restore', checkToken, handlerWrapper((req, res) => {
     const id = req.params.id;
     const user = userService.restoreUser(id);
     res.status(200).json(user);
