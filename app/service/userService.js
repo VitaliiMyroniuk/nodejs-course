@@ -1,12 +1,14 @@
 const User = require('../model/user');
 const EntityNotFoundError = require('../error/entityNotFoundError');
 const UniqueIdentifierError = require('../error/uniqueIdentifierError');
+const groupService = require('./groupService');
 const userDao = require('../dao/userDao');
 
 const userService = {
 
     createUser(userData) {
         validateLogin(userData.login);
+        validateGroupId(userData.groupId);
         const user = new User(userData);
         return userDao.createOrUpdateUser(user);
     },
@@ -32,6 +34,7 @@ const userService = {
         if (user.login !== userData.login) {
             validateLogin(userData.login);
         }
+        validateGroupId(userData.groupId);
         populateUser(user, userData);
         return userDao.createOrUpdateUser(user);
     },
@@ -46,6 +49,11 @@ const userService = {
         const user = this.getUserById(id);
         user.isDeleted = false;
         return userDao.createOrUpdateUser(user);
+    },
+
+    getUserGroup(id) {
+        const user = this.getUserById(id);
+        return groupService.getGroupById(user.groupId);
     }
 };
 
@@ -53,6 +61,13 @@ function validateLogin(login) {
     const isLoginExisted = userDao.isLoginExisted(login);
     if (isLoginExisted) {
         throw new UniqueIdentifierError(`Login ${login} has already existed`);
+    }
+}
+
+function validateGroupId(groupId) {
+    const isGroupExisted = groupService.isGroupExisted(groupId);
+    if (!isGroupExisted) {
+        throw new EntityNotFoundError(`Group with id ${groupId} not found`);
     }
 }
 

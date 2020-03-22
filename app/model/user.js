@@ -6,6 +6,7 @@ class User {
         this.login = userData.login;
         this.password = userData.password;
         this.age = userData.age;
+        this.groupId = userData.groupId;
         this.isDeleted = false;
     }
 }

@@ -13,6 +13,10 @@ const groupService = {
             throw new EntityNotFoundError(`Group with id ${id} not found`);
         }
         return group;
+    },
+
+    isGroupExisted(id) {
+        return groupDao.isGroupExisted(id);
     }
 };
 

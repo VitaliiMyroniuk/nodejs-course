@@ -8,6 +8,10 @@ const groupDao = {
 
     getGroupById(id) {
         return db.groups.get(id);
+    },
+
+    isGroupExisted(id) {
+        return db.groups.has(id);
     }
 };
 

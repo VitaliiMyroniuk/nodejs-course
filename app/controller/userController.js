@@ -33,6 +33,12 @@ router.get('/users/:id', checkToken, handlerWrapper((req, res) => {
     res.status(200).json(user);
 }));
 
+router.get('/users/:id/group', checkToken, handlerWrapper((req, res) => {
+    const id = req.params.id;
+    const group = userService.getUserGroup(id);
+    res.status(200).json(group);
+}));
+
 router.put('/users/:id', checkToken, userValidator, handlerWrapper((req, res) => {
     const id = req.params.id;
     const userData = req.body;
