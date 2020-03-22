@@ -1,7 +1,8 @@
 const express = require('express');
 const { logger, requestLogger } = require('./logger/winstonLogger');
 const corsHandler = require('./security/corsHandler');
-const router = require('./controller/userController');
+const userRouter = require('./controller/userController');
+const groupRouter = require('./controller/groupController');
 
 const app = express();
 const PORT = 3000;
@@ -9,7 +10,8 @@ const PORT = 3000;
 app.use(express.json());
 app.use(requestLogger);
 app.use(corsHandler);
-app.use('/', router);
+app.use('/', userRouter);
+app.use('/', groupRouter);
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT} port.`);
 });
