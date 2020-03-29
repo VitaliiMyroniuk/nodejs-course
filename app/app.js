@@ -22,3 +22,5 @@ process.on('uncaughtException', err => {
     logger.error(err.stack);
     process.exit(1);
 });
+
+module.exports = app;

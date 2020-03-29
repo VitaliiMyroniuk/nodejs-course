@@ -3,8 +3,15 @@
   "version": "1.0.0",
   "description": "Nodejs mentoring program",
   "main": "index.js",
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
   "scripts": {
-    "test": "jest",
+    "unit-tests": "jest unit",
+    "integration-tests": "jest integration",
     "task1": "nodemon -r esm ./hw1/task1.js",
     "task2": "nodemon ./hw1/task2.js",
     "hw1-translate": "npx babel hw1 --out-dir hw1_babel",
@@ -34,7 +41,8 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^6.8.0",
     "jest": "^25.2.3",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.3",
