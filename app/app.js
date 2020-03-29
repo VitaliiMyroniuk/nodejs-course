@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const { logger, requestLogger } = require('./logger/winstonLogger');
 const corsHandler = require('./security/corsHandler');
@@ -5,7 +6,7 @@ const userRouter = require('./controller/userController');
 const groupRouter = require('./controller/groupController');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(requestLogger);
