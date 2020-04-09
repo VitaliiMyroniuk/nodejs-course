@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const userService = require('../service/userService');
 
-const SECRET_KEY = '3d560d3c-3714-4750-aa93-cd6a30b4f261';
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const authenticateUser = (req, res) => {
     const { login, password } = req.body;

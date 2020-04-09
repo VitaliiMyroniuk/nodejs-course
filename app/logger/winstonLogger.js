@@ -1,7 +1,7 @@
 const winston = require('winston');
 
 const FILE_OPTIONS = {
-    level: 'warn',
+    level: process.env.FILE_LOGGER_LEVEL,
     filename: './logs/app.log',
     maxsize: 10 * 1024 * 1024, // 10MB
     maxFiles: 5,
@@ -12,7 +12,7 @@ const FILE_OPTIONS = {
 };
 
 const CONSOLE_OPTIONS = {
-    level: 'debug',
+    level: process.env.CONSOLE_LOGGER_LEVEL,
     format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.colorize(),

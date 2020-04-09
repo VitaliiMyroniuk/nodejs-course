@@ -1,9 +1,9 @@
 const express = require('express');
-const { logger, errorLogger } = require('../logger/winstonLogger');
-const EntityNotFoundError = require('../error/entityNotFoundError');
-const UniqueIdentifierError = require('../error/uniqueIdentifierError');
+const { errorLogger } = require('../logger/winstonLogger');
+const { validationErrorHandler, modelSavingErrorHandler, commonErrorHandler } = require('../handler/errorHandler');
 const { checkToken, authenticateUser } = require('../security/authentication');
 const corsHandler = require('../security/corsHandler');
+const handlerWrapper = require('../wrapper/handlerWrapper');
 const userValidator = require('../validation/userValidator');
 const userService = require('../service/userService');
 
@@ -33,6 +33,12 @@ router.get('/users/:id', checkToken, handlerWrapper((req, res) => {
     res.status(200).json(user);
 }));
 
+router.get('/users/:id/group', checkToken, handlerWrapper((req, res) => {
+    const id = req.params.id;
+    const group = userService.getUserGroup(id);
+    res.status(200).json(group);
+}));
+
 router.put('/users/:id', checkToken, userValidator, handlerWrapper((req, res) => {
     const id = req.params.id;
     const userData = req.body;
@@ -59,49 +65,5 @@ router.use(validationErrorHandler);
 router.use(modelSavingErrorHandler);
 
 router.use(commonErrorHandler);
-
-function validationErrorHandler(err, req, res, next) {
-    if (err && err.error && err.error.isJoi) {
-        res.status(400).json({
-            type: err.type,
-            message: err.error.toString()
-        });
-    } else {
-        return next(err);
-    }
-}
-
-function modelSavingErrorHandler(err, req, res, next) {
-    if (err instanceof EntityNotFoundError || err instanceof UniqueIdentifierError) {
-        res.status(400).json({
-            type: err.name,
-            message: err.message
-        });
-    } else {
-        return next(err);
-    }
-}
-
-function commonErrorHandler(err, req, res, next) {
-    if (res.headersSent) {
-        return next(err);
-    }
-    res.status(500).json({
-        message: 'Internal Server Error'
-    });
-}
-
-function handlerWrapper(func) {
-    return (req, res, next) => {
-        try {
-            const start = new Date();
-            func(req, res);
-            const end = new Date();
-            logger.info(`${req.method} ${req.url} successfully executed in ${end - start} ms`);
-        } catch (err) {
-            return next(err);
-        }
-    };
-}
 
 module.exports = router;
